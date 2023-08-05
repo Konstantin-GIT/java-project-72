@@ -11,10 +11,19 @@ repositories {
     mavenCentral()
 }
 
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
 jacocoTestReport {
     reports {
         xml.required = true
     }
+}
+
+checkstyle {
+    toolVersion '10.12.1'
 }
 
 dependencies {
@@ -24,10 +33,7 @@ dependencies {
 
 }
 
-test {
-    useJUnitPlatform()
-    finalizedBy jacocoTestReport
-}
+
 
 application {
     mainClass = 'hexlet.code.App'
