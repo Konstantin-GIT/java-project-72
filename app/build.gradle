@@ -34,7 +34,6 @@ dependencies {
 }
 
 
-
 application {
     mainClass = 'hexlet.code.App'
 }
