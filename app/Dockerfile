@@ -4,15 +4,13 @@ WORKDIR /app
 
 COPY gradle gradle
 COPY gradlew .
-
-RUN ./gradlew --no-daemon dependencies
+COPY / .
 
 COPY src src
 COPY config config
 
-RUN ./gradlew --no-daemon build
+RUN ./gradle installDist
 
-ENV JAVA_OPTS "-Xmx512M -Xms512M"
 EXPOSE 7070
 
 
