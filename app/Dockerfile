@@ -9,7 +9,7 @@ COPY / .
 COPY src src
 COPY config config
 
-RUN ./gradle installDist
+RUN ./gradlew installDist
 
 EXPOSE 7070
 
