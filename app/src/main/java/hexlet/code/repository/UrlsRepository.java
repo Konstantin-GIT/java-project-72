@@ -28,6 +28,7 @@ public class UrlsRepository extends BaseRepository {
                 url.setId(generatedKeys.getLong(1));
                 url.setCreatedAt(datetime);
                 System.out.println("generatedKeys.getLong(1))!!!!!!!!!!! =  " + generatedKeys.getLong(1));
+                System.out.println("JDBC_URL !!!!!!!!!!!!!!! =  " + JDBC_URL);
             } else {
                 throw new SQLException("DB have not returned an id after saving an entity");
             }
