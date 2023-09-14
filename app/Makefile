@@ -12,9 +12,13 @@ run:
 test:
 	./gradlew test
 
+lint:
+	./gradlew checkstyleMain
+
 report:
 	./gradlew jacocoTestReport
 
 build-run: build run
 
 .PHONY: build
+

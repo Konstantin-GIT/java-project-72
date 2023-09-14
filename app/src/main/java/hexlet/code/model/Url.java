@@ -17,14 +17,11 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "Url")
 public class Url {
-
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private long id;
-
-        @Column(unique = true)
-        private String name;
-
-        @Column
-        private Timestamp createdAt;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    @Column(unique = true)
+    private String name;
+    @Column
+    private Timestamp createdAt;
 }

@@ -19,7 +19,7 @@ public class UrlsRepository extends BaseRepository {
         var sql = "INSERT INTO urls (name, created_at) VALUES (?, ?)";
         var datetime = new Timestamp(System.currentTimeMillis());
         try (var conn = BaseRepository.getDataSource().getConnection();
-             var preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            var preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, "1111");
             preparedStatement.setTimestamp(2, datetime);
             preparedStatement.executeUpdate();
@@ -27,7 +27,7 @@ public class UrlsRepository extends BaseRepository {
             if (generatedKeys.next()) {
                 url.setId(generatedKeys.getLong(1));
                 url.setCreatedAt(datetime);
-                System.out.println("generatedKeys.getLong(1))!!!!!!!!!!! = " + generatedKeys.getLong(1));
+                System.out.println("generatedKeys.getLong(1))!!!!!!!!!!! =  " + generatedKeys.getLong(1));
             } else {
                 throw new SQLException("DB have not returned an id after saving an entity");
             }

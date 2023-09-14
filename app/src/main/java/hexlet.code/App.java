@@ -5,7 +5,6 @@ import hexlet.code.repository.UrlsRepository;
 import io.javalin.Javalin;
 
 import java.sql.SQLException;
-import java.sql.Timestamp;
 
 public class App {
 
