@@ -1,6 +1,11 @@
 package hexlet.code;
 
+import hexlet.code.model.Url;
+import hexlet.code.repository.UrlsRepository;
 import io.javalin.Javalin;
+
+import java.sql.SQLException;
+import java.sql.Timestamp;
 
 public class App {
 
@@ -27,8 +32,9 @@ public class App {
         return app;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         Javalin app = getApp();
         app.start(getPort());
+        UrlsRepository.save(new Url());
     }
 }
