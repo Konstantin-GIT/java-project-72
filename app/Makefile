@@ -13,7 +13,7 @@ test:
 	./gradlew test
 
 lint:
-	./gradlew checkstyleMain
+	./gradlew checkstyleMain checkstyleTest
 
 report:
 	./gradlew jacocoTestReport
