@@ -2,6 +2,7 @@ plugins {
     id 'application'
     id 'checkstyle'
     id 'jacoco'
+    id 'gg.jte.gradle' version '3.1.0'
 }
 
 group 'hexlet.code'
@@ -36,10 +37,18 @@ dependencies {
     implementation group: 'com.zaxxer', name: 'HikariCP', version: '5.0.1'
     implementation group: 'jakarta.persistence', name: 'jakarta.persistence-api', version: '3.1.0'
     implementation group: 'org.postgresql', name: 'postgresql', version: '42.6.0'
+    implementation group: 'gg.jte', name: 'jte', version: '3.1.0'
+    implementation group: 'io.javalin', name: 'javalin-rendering', version: '5.6.2'
+    implementation group: 'org.webjars', name: 'bootstrap', version: '5.3.1'
+
 
     compileOnly 'org.projectlombok:lombok:1.18.20'
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
 
+}
+
+jte {
+    precompile()
 }
 
 
