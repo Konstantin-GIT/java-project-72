@@ -14,7 +14,7 @@ public class BaseRepository {
     }
     private static final String JDBC_URL_H2 = "jdbc:h2:mem:hikariDB";
 
-    static String JDBC_URL = getJdbcDatabaseUrl();
+    static String jdbcUrl = getJdbcDatabaseUrl();
 
     public static String getJdbcDatabaseUrl() {
         // Получаем значение переменной окружения JDBC_DATABASE_URL
@@ -33,7 +33,7 @@ public class BaseRepository {
 
     static {
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(JDBC_URL);
+        config.setJdbcUrl(jdbcUrl);
         config.setUsername(USERNAME);
         config.setPassword(PASSWORD);
         dataSource = new HikariDataSource(config);
