@@ -14,6 +14,7 @@ public class BaseRepository {
     }
     private static final String JDBC_URL_H2 = "jdbc:h2:mem:hikariDB";
 
+
     static String jdbcUrlCurrent = getJdbcDatabaseUrl();
 
     public static String getJdbcDatabaseUrl() {
@@ -27,15 +28,11 @@ public class BaseRepository {
 
         return jdbcUrl;
     }
-    //private static final String USERNAME = "konstantin";
-   // private static final String PASSWORD = "QYZgokSmgU0jOVY1hjnizbe7xoMeKDih";
     private static HikariDataSource dataSource;
 
     static {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl(jdbcUrlCurrent);
-        //config.setUsername(USERNAME);
-        //config.setPassword(PASSWORD);
         dataSource = new HikariDataSource(config);
     }
 
