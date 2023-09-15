@@ -27,15 +27,15 @@ public class BaseRepository {
 
         return jdbcUrl;
     }
-    private static final String USERNAME = "konstantin";
-    private static final String PASSWORD = "QYZgokSmgU0jOVY1hjnizbe7xoMeKDih";
+    //private static final String USERNAME = "konstantin";
+   // private static final String PASSWORD = "QYZgokSmgU0jOVY1hjnizbe7xoMeKDih";
     private static HikariDataSource dataSource;
 
     static {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl(jdbcUrlCurrent);
-        config.setUsername(USERNAME);
-        config.setPassword(PASSWORD);
+        //config.setUsername(USERNAME);
+        //config.setPassword(PASSWORD);
         dataSource = new HikariDataSource(config);
     }
 
