@@ -7,9 +7,7 @@ import io.javalin.Javalin;
 import gg.jte.ContentType;
 import gg.jte.TemplateEngine;
 import io.javalin.rendering.template.JavalinJte;
-
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Map;
 
 public class App {
