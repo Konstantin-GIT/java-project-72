@@ -48,7 +48,9 @@ dependencies {
 }
 
 jte {
-    precompile()
+    // Указываем директорию, где находятся исходные файлы шаблонов
+    sourceDirectory = java.nio.file.FileSystems.getDefault().getPath('src/main/resources/templates')
+
 }
 
 
