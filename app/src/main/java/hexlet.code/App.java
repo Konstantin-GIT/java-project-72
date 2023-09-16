@@ -1,14 +1,16 @@
 package hexlet.code;
 
 import gg.jte.resolve.ResourceCodeResolver;
-import hexlet.code.model.Url;
-import hexlet.code.repository.UrlsRepository;
+import hexlet.code.controllers.HandlerUrls;
 import io.javalin.Javalin;
 import gg.jte.ContentType;
 import gg.jte.TemplateEngine;
 import io.javalin.rendering.template.JavalinJte;
 import java.sql.SQLException;
 import java.util.Map;
+
+import static io.javalin.apibuilder.ApiBuilder.path;
+import static io.javalin.apibuilder.ApiBuilder.post;
 
 public class App {
 
@@ -25,10 +27,7 @@ public class App {
         JavalinJte.init(createTemplateEngine());
 
         // Добавляем маршруты в приложение
-        app.get("/", ctx -> ctx.result("Hello World"));
-
-
-        app.get("/render", ctx -> ctx.render("Welcome.jte", Map.of("title", "TEST!!!!!!!!")));
+        addRoutes(app);
 
         // Обработчик before запускается перед каждым запросом
         // Устанавливаем атрибут ctx для запросов
@@ -38,6 +37,21 @@ public class App {
 
         return app;
     }
+
+
+    private static void addRoutes(Javalin app) {
+        app.get("/", ctx -> ctx.result("Hello World"));
+
+        app.get("/render", ctx -> ctx.render("Welcome.jte", Map.of("title", "TEST!!!!!!!!")));
+
+        app.routes(() -> {
+            path("/urls", () -> {
+                post(HandlerUrls.createUrl);
+            });
+        });
+
+    }
+
 
     private static TemplateEngine createTemplateEngine() {
         ClassLoader classLoader = App.class.getClassLoader();
@@ -50,6 +64,6 @@ public class App {
     public static void main(String[] args) throws SQLException {
         Javalin app = getApp();
         app.start(getPort());
-        UrlsRepository.save(new Url());
+        //UrlsRepository.save(new Url());
     }
 }
