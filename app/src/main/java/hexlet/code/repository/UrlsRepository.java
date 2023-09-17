@@ -19,7 +19,6 @@ public class UrlsRepository extends BaseRepository {
             preparedStatement.execute();
         }
 
-
         var sql = "INSERT INTO urls (name, created_at) VALUES (?, ?)";
         var datetime = new Timestamp(System.currentTimeMillis());
         try (var conn = BaseRepository.getDataSource().getConnection();
@@ -27,17 +26,6 @@ public class UrlsRepository extends BaseRepository {
             preparedStatement.setString(1, urlName);
             preparedStatement.setTimestamp(2, datetime);
             preparedStatement.executeUpdate();
-            var generatedKeys = preparedStatement.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                //Url url = new Url();
-                //url.setId(generatedKeys.getLong(1));
-                //url.setName(urlName);
-                //url.setCreatedAt(datetime);
-                System.out.println("generatedKeys.getLong(1))!!!!!!!!!!! =  " + generatedKeys.first());
-                System.out.println("jdbcUrlCurrent !!!!!!!!!!!!!!! =  " + jdbcUrlCurrent);
-            } else {
-                throw new SQLException("DB have not returned an id after saving an entity");
-            }
         }
     }
 }

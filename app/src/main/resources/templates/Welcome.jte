@@ -1,6 +1,3 @@
-<!-- Welcome.jte -->
-
-@param  String title
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +19,7 @@
                     <form method="post" action="/urls">
                         <div class="form-group">
                             <label for="inputField">Ваше имя:</label>
-                            <input type="text"  class="form-control"  name="name" placeholder="Ваше имя">
+                            <input type="text"  class="form-control"  name="url" placeholder="Ваше имя">
                         </div>
                         <button type="submit" class="btn btn-success btn-block">Submit</button>
                     </form>

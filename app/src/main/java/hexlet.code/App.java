@@ -40,9 +40,7 @@ public class App {
 
 
     private static void addRoutes(Javalin app) {
-        app.get("/", ctx -> ctx.result("Hello World"));
-
-        app.get("/render", ctx -> ctx.render("Welcome.jte", Map.of("title", "TEST!!!!!!!!")));
+        app.get("/", ctx -> ctx.render("Welcome.jte"));
 
         app.routes(() -> {
             path("/urls", () -> {
