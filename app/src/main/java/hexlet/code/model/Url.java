@@ -15,7 +15,7 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @Entity
-@Table(name = "Url")
+@Table(name = "urls")
 public class Url {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

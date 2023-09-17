@@ -7,8 +7,8 @@ import gg.jte.ContentType;
 import gg.jte.TemplateEngine;
 import io.javalin.rendering.template.JavalinJte;
 import java.sql.SQLException;
-import static io.javalin.apibuilder.ApiBuilder.path;
-import static io.javalin.apibuilder.ApiBuilder.post;
+
+import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class App {
 
@@ -38,11 +38,12 @@ public class App {
 
 
     private static void addRoutes(Javalin app) {
-        app.get("/", ctx -> ctx.render("Welcome.jte"));
+        app.get("/", ctx -> ctx.render("index.jte"));
 
         app.routes(() -> {
             path("/urls", () -> {
                 post(HandlerUrls.createUrl);
+                get(HandlerUrls.getUrls);
             });
         });
 
