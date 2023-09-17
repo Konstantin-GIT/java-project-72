@@ -3,7 +3,6 @@ package hexlet.code.controllers;
 import hexlet.code.model.Url;
 import hexlet.code.repository.BaseRepository;
 import hexlet.code.repository.UrlsRepository;
-import hexlet.code.utils.UrlParsing;
 import io.javalin.http.Handler;
 import java.sql.ResultSet;
 import java.sql.Statement;

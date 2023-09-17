@@ -24,7 +24,7 @@ public class UrlParsing {
             System.out.println("Path: " + path);
             System.out.println("Query: " + query);
             System.out.println("Ref: " + ref);
-            urlResult = new URL(protocol, host, port,"");
+            urlResult = new URL(protocol, host, port, "");
             return urlResult.toString();
         } catch (MalformedURLException e) {
             System.err.println("Ошибка при разборе URL: " + e.getMessage());
