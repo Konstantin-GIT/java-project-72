@@ -7,13 +7,7 @@ import com.zaxxer.hikari.HikariDataSource;
  * Represents the base repository class.
  */
 public class BaseRepository {
-
-    private static int getPort() {
-        String port = System.getenv().getOrDefault("PORT", "7070");
-        return Integer.valueOf(port);
-    }
     private static final String JDBC_URL_H2 = "jdbc:h2:./hikariDB";
-
 
     static String jdbcUrlCurrent = getJdbcDatabaseUrl();
 
