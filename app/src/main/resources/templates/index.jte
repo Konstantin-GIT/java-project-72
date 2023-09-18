@@ -1,5 +1,5 @@
 @param String errorMessage
-@param String successMessage
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,22 +10,18 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body style="background-color: #f8f9fa;">
-@if (errorMessage != null)
+@if (!errorMessage.isEmpty())
 <div class="alert alert-danger" role="alert">
     ${errorMessage}
 </div>
 @endif
-@if (successMessage != null)
-    <div class="alert alert-success" role="alert">
-        ${successMessage}
-    </div>
-@endif
+
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header bg-primary text-white text-center">
-                    <h2>Simple Form</h2>
+                    <h2>Анализатор страниц</h2>
                 </div>
                 <div class="card-body">
                     <form method="post" action="/urls">

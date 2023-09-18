@@ -1,6 +1,7 @@
 @import hexlet.code.model.Url
 @import java.util.List
 @param List<Url> urlsList
+@param String successMessage
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,6 +13,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+@if (!successMessage.isEmpty())
+    <div class="alert alert-success" role="alert">
+        ${successMessage}
+    </div>
+@endif
 <div class="container mt-5">
     <h1 class="display-4">Список URL</h1>
     <table class="table table-striped">
@@ -26,7 +32,9 @@
         @for (Url url : urlsList)
         <tr>
             <td>${url.getId()}</td>
-            <td>${url.getName()}</td>
+            <td>
+                <a href="/urls/${url.getId()}">${url.getName()}</a>
+            </td>
             <td>${url.getCreatedAt().toString()}</td>
         </tr>
         @endfor

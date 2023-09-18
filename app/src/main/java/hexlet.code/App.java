@@ -1,7 +1,8 @@
 package hexlet.code;
 
 import gg.jte.resolve.ResourceCodeResolver;
-import hexlet.code.controllers.HandlerUrls;
+import hexlet.code.controllers.UrlController;
+import hexlet.code.controllers.RootController;
 import io.javalin.Javalin;
 import gg.jte.ContentType;
 import gg.jte.TemplateEngine;
@@ -39,12 +40,16 @@ public class App {
 
 
     private static void addRoutes(Javalin app) {
-        app.get("/", ctx -> ctx.render("index.jte"));
-
         app.routes(() -> {
+            path("/", () -> {
+                get(RootController.index);
+            });
             path("/urls", () -> {
-                post(HandlerUrls.createUrl);
-                get(HandlerUrls.getUrls);
+                post(UrlController.createUrl);
+                get(UrlController.getUrls);
+                path("{id}/", () -> {
+                    get(UrlController.showUrl);
+                });
             });
         });
 
