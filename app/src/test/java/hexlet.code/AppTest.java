@@ -37,6 +37,7 @@ class AppTest {
             var response = client.post("/urls", requestBody);
             assertThat(response.code()).isEqualTo(200);
             assertThat(response.body().string()).contains("https://javalinTest.io");
+
         });
     }
 
@@ -58,6 +59,40 @@ class AppTest {
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls/777");
             assertThat(response.code()).isEqualTo(404);
+        });
+    }
+
+    @Test
+    public void testNotCorrectUrl() {
+        JavalinTest.test(app, (server, client) -> {
+            var requestBody = "url=notCorrectUrl";
+            var response = client.post("/urls", requestBody);
+            assertThat(response.code()).isEqualTo(200);
+            assertThat(response.body().string()).contains("Анализатор страниц");
+        });
+    }
+
+    @Test
+    public void testUniqUrlValidation() throws SQLException {
+        var url = new Url();
+        url.setName("https://javalinTest.io");
+        UrlsRepository.save(url);
+
+        JavalinTest.test(app, (server, client) -> {
+            var requestBody = "url=https://javalinTest.io";
+            var response = client.post("/urls", requestBody);
+            assertThat(response.code()).isEqualTo(200);
+            assertThat(response.body().string()).contains("Анализатор страниц");
+        });
+    }
+
+    @Test
+    public void testNullUrlValidation() throws SQLException {
+
+        JavalinTest.test(app, (server, client) -> {
+            var response = client.post("/urls", "");
+            assertThat(response.code()).isEqualTo(200);
+            assertThat(response.body().string()).contains("Анализатор страниц");
         });
     }
 
