@@ -1,13 +1,22 @@
 package hexlet.code;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import gg.jte.resolve.ResourceCodeResolver;
 import hexlet.code.controllers.UrlController;
 import hexlet.code.controllers.RootController;
+import hexlet.code.repository.BaseRepository;
 import io.javalin.Javalin;
 import gg.jte.ContentType;
 import gg.jte.TemplateEngine;
 import io.javalin.rendering.template.JavalinJte;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.sql.SQLException;
+import java.util.stream.Collectors;
+
 import static io.javalin.apibuilder.ApiBuilder.path;
 import static io.javalin.apibuilder.ApiBuilder.post;
 import static io.javalin.apibuilder.ApiBuilder.get;
@@ -18,10 +27,44 @@ public class App {
         String port = System.getenv().getOrDefault("PORT", "7070");
         return Integer.valueOf(port);
     }
-    public static Javalin getApp() {
+
+    private static final String JDBC_URL_H2 = "jdbc:h2:./hikariDB";
+
+    static String jdbcUrlCurrent = getJdbcDatabaseUrl();
+
+    public static String getJdbcDatabaseUrl() {
+        // Получаем значение переменной окружения JDBC_DATABASE_URL
+        String jdbcUrl = System.getenv("JDBC_DATABASE_URL");
+
+        // Если переменная окружения не установлена, устанавливаем значение по умолчанию
+        if (jdbcUrl == null || jdbcUrl.isEmpty()) {
+            jdbcUrl = JDBC_URL_H2; // Значение по умолчанию
+        }
+
+        return jdbcUrl;
+    }
+
+    public static Javalin getApp() throws IOException {
+        HikariConfig hikariConfig = new HikariConfig();
+        hikariConfig.setJdbcUrl(jdbcUrlCurrent);
+        var dataSource  = new HikariDataSource(hikariConfig);
+
+        var url = App.class.getClassLoader().getResource("schema.sql");
+        var file = new File(url.getFile());
+        var sql = Files.lines(file.toPath())
+            .collect(Collectors.joining("\n"));
+
+        System.out.println(sql);
+        try (var connection = dataSource.getConnection();
+             var statement = connection.createStatement()) {
+            statement.execute(sql);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        BaseRepository.dataSource = dataSource;
+
         // Создаём приложение
-        Javalin app = Javalin.create(config -> {
-            // Включаем логгирование
+        var app = Javalin.create(config -> {
             config.plugins.enableDevLogging();
         });
         JavalinJte.init(createTemplateEngine());
@@ -64,9 +107,8 @@ public class App {
     }
 
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, IOException {
         Javalin app = getApp();
         app.start(getPort());
-        //UrlsRepository.save(new Url());
     }
 }

@@ -382,3 +382,25 @@ Caused by: org.h2.mvstore.MVStoreException: The file is locked: /home/konstantin
 	at org.h2.mvstore.FileStore.open(FileStore.java:128)
 	at org.h2.mvstore.MVStore.<init>(MVStore.java:452)
 	... 52 more
+2023-09-19 09:05:48 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE urlCheck (\000a    id INT PRIMARY KEY AUTO_INCREMENT,\000a    statusCode INT NOT NULL[*].\000a    title VARCHAR(255).\000a    h1 VARCHAR(255).\000a    title VARCHAR(255).\000a    description CLOB,\000a    urlId LONG urlId NOT NULL\000a);"; expected "AS, DEFAULT, GENERATED, ON UPDATE, AUTO_INCREMENT, DEFAULT ON NULL, NULL_TO_DEFAULT, SEQUENCE, SELECTIVITY, COMMENT, CONSTRAINT, COMMENT, PRIMARY KEY, UNIQUE, NOT NULL, NULL, CHECK, REFERENCES, AUTO_INCREMENT, ,, )"; SQL statement:
+CREATE TABLE urlCheck (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    statusCode INT NOT NULL.
+    title VARCHAR(255).
+    h1 VARCHAR(255).
+    title VARCHAR(255).
+    description CLOB,
+    urlId LONG urlId NOT NULL
+); [42001-214]
+2023-09-19 09:06:54 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE urlCheck (\000a    id INT PRIMARY KEY AUTO_INCREMENT,\000a    statusCode INT NOT NULL[*].\000a    title VARCHAR(255),\000a    h1 VARCHAR(255),\000a    title VARCHAR(255),\000a    description CLOB,\000a    urlId LONG NOT NULL\000a);"; expected "AS, DEFAULT, GENERATED, ON UPDATE, AUTO_INCREMENT, DEFAULT ON NULL, NULL_TO_DEFAULT, SEQUENCE, SELECTIVITY, COMMENT, CONSTRAINT, COMMENT, PRIMARY KEY, UNIQUE, NOT NULL, NULL, CHECK, REFERENCES, AUTO_INCREMENT, ,, )"; SQL statement:
+CREATE TABLE urlCheck (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    statusCode INT NOT NULL.
+    title VARCHAR(255),
+    h1 VARCHAR(255),
+    title VARCHAR(255),
+    description CLOB,
+    urlId LONG NOT NULL
+); [42001-214]

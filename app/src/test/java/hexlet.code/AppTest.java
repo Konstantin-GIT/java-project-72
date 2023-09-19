@@ -4,6 +4,8 @@ import hexlet.code.model.Url;
 import hexlet.code.repository.UrlsRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
 import java.sql.SQLException;
 import io.javalin.Javalin;
 import io.javalin.testtools.JavalinTest;
@@ -15,9 +17,10 @@ class AppTest {
     Javalin app;
 
     @BeforeEach
-    public final void setUp() {
-        UrlsRepository.truncateUrls();
+    public final void setUp() throws IOException {
+
         app = App.getApp();
+        //UrlsRepository.truncateUrls();
 
     }
 
