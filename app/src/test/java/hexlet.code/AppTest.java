@@ -2,9 +2,11 @@ package hexlet.code;
 
 import hexlet.code.model.Url;
 import hexlet.code.repository.UrlsRepository;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import io.javalin.Javalin;
@@ -16,12 +18,22 @@ class AppTest {
     // BEGIN
     Javalin app;
 
+    private MockWebServer mockWebServer;
+
     @BeforeEach
-    public final void setUp() throws IOException {
+    public void setUpMock() throws IOException {
+        mockWebServer = new MockWebServer();
+        mockWebServer.start();
 
         app = App.getApp();
-        //UrlsRepository.truncateUrls();
 
+    }
+
+
+
+    @AfterEach
+    public void tearDown() throws IOException {
+        mockWebServer.shutdown();
     }
 
     @Test
@@ -98,5 +110,43 @@ class AppTest {
             assertThat(response.body().string()).contains("Анализатор страниц");
         });
     }
+
+    @Test
+    public void testCheckShowUrl() throws SQLException {
+        var url = new Url();
+        url.setName("https://javalinTest.io");
+        UrlsRepository.save(url);
+
+        JavalinTest.test(app, (server, client) -> {
+            var response = client.get("/urls/" + url.getId());
+            assertThat(response.code()).isEqualTo(200);
+            assertThat(response.body().string())
+                .contains("Информация о URL")
+                .contains("https://javalinTest.io")
+                .contains("ID: " + url.getId());
+        });
+    }
+
+    @Test
+    public void testCheckUrl() throws SQLException {
+        MockResponse mockResponse = new MockResponse()
+            .setResponseCode(200)
+            .setBody("Hello, World!");
+
+        mockWebServer.enqueue(mockResponse);
+        var urlName = mockWebServer.url("/test1");
+
+
+        var url = new Url();
+        url.setName(urlName.toString());
+        UrlsRepository.save(url);
+
+        JavalinTest.test(app, (server, client) -> {
+            var response = client.post("/urls/" + url.getId() + "/checks", "");
+            assertThat(response.code()).isEqualTo(200);
+            assertThat(response.body().string()).contains("Hello, World!");
+        });
+    }
+
 
 }

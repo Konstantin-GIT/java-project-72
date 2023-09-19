@@ -1,6 +1,8 @@
 package hexlet.code.controllers;
 
 import hexlet.code.model.Url;
+import hexlet.code.model.UrlCheck;
+import hexlet.code.repository.UrlChecksRepository;
 import hexlet.code.repository.UrlsRepository;
 import io.javalin.http.Handler;
 import java.util.List;
@@ -40,9 +42,16 @@ public class UrlController {
 
     public static Handler showUrl = ctx -> {
         long id = ctx.pathParamAsClass("id", Long.class).getOrDefault(null);
+        var successMessage = ctx.consumeSessionAttribute("successMessage");
+        var errorMessage = ctx.consumeSessionAttribute("errorMessage");
+        successMessage =  successMessage == null ? "" : successMessage;
+        errorMessage =  errorMessage == null ? "" : errorMessage;
         Url url = getUrlById(id);
         if (url != null) {
-            ctx.render("urls/show.jte", Map.of("url", url));
+            List<UrlCheck> urlChecks = UrlChecksRepository.getUrlChecks(url.getId());
+            ctx.render("urls/show.jte",
+                Map.of("url", url, "urlChecksList", urlChecks,
+                    "successMessage", successMessage, "errorMessage", errorMessage));
         } else {
             ctx.status(404);
         }

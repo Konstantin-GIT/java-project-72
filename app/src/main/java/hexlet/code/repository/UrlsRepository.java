@@ -81,16 +81,5 @@ public class UrlsRepository extends BaseRepository {
             return urls;
         }
     }
-    public static void truncateUrls() {
-
-        var sql = "TRUNCATE TABLE urls";
-
-        try (var conn = BaseRepository.dataSource.getConnection();
-             var preparedStatement = conn.prepareStatement(sql)) {
-            preparedStatement.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
 }

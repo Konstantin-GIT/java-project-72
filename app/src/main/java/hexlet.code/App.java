@@ -3,6 +3,7 @@ package hexlet.code;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import gg.jte.resolve.ResourceCodeResolver;
+import hexlet.code.controllers.UrlCheckController;
 import hexlet.code.controllers.UrlController;
 import hexlet.code.controllers.RootController;
 import hexlet.code.repository.BaseRepository;
@@ -10,7 +11,6 @@ import io.javalin.Javalin;
 import gg.jte.ContentType;
 import gg.jte.TemplateEngine;
 import io.javalin.rendering.template.JavalinJte;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -90,12 +90,14 @@ public class App {
             path("/urls", () -> {
                 post(UrlController.createUrl);
                 get(UrlController.getUrls);
-                path("{id}/", () -> {
+                path("{id}", () -> {
                     get(UrlController.showUrl);
+                    path("checks", () -> {
+                        post(UrlCheckController.checkCreate);
+                    });
                 });
             });
         });
-
     }
 
 
@@ -111,4 +113,6 @@ public class App {
         Javalin app = getApp();
         app.start(getPort());
     }
+
+
 }

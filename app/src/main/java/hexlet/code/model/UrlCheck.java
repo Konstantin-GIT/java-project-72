@@ -9,6 +9,17 @@ import java.sql.Timestamp;
 @Setter
 public class UrlCheck {
 
+    public UrlCheck() {
+    }
+
+    public UrlCheck(Timestamp createdAt, int statusCode, String description, long urlId) {
+        this.createdAt = createdAt;
+        this.statusCode = statusCode;
+        this.description = description;
+        this.urlId = urlId;
+        // Другие поля останутся неинициализированными
+    }
+
     private long id;
 
     private Timestamp createdAt;
