@@ -12,11 +12,13 @@ public class UrlCheck {
     public UrlCheck() {
     }
 
-    public UrlCheck(Timestamp createdAt, int statusCode, String description, long urlId) {
+    public UrlCheck(Timestamp createdAt, int statusCode, String description, long urlId, String title, String h1) {
         this.createdAt = createdAt;
         this.statusCode = statusCode;
         this.description = description;
         this.urlId = urlId;
+        this.title = title;
+        this.h1 = h1;
         // Другие поля останутся неинициализированными
     }
 
@@ -28,10 +30,11 @@ public class UrlCheck {
 
     private String title;
 
-    private String h1;
-
     private String description;
 
     private long urlId;
+
+    private String h1;
+
 
 }

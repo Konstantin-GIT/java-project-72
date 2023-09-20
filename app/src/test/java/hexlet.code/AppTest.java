@@ -4,7 +4,6 @@ import hexlet.code.model.Url;
 import hexlet.code.repository.UrlsRepository;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.io.IOException;
@@ -31,7 +30,7 @@ class AppTest {
 
 
 
-    @AfterEach
+    //@AfterEach
     public void tearDown() throws IOException {
         mockWebServer.shutdown();
     }
@@ -127,14 +126,23 @@ class AppTest {
         });
     }
 
+
     @Test
-    public void testCheckUrl() throws SQLException {
+    public void testParsingResponse() throws SQLException {
         MockResponse mockResponse = new MockResponse()
             .setResponseCode(200)
-            .setBody("Hello, World!");
-
+            .setBody("""
+                 <html>
+                 <head>
+                 <meta name="description" content="Open source Java">
+                 <title>Sample Page</title>
+                 </head>
+                 <body><h1>Hello, World!</h1></body>
+                 </html>
+                """
+            );
         mockWebServer.enqueue(mockResponse);
-        var urlName = mockWebServer.url("/test1");
+        var urlName = mockWebServer.url("/testParsingResponse");
 
 
         var url = new Url();
@@ -144,7 +152,10 @@ class AppTest {
         JavalinTest.test(app, (server, client) -> {
             var response = client.post("/urls/" + url.getId() + "/checks", "");
             assertThat(response.code()).isEqualTo(200);
-            assertThat(response.body().string()).contains("Hello, World!");
+            assertThat(response.body().string())
+                .contains("Hello, World!</td>")
+                .contains("Sample Page</td>")
+                .contains("Open source Java</td>");
         });
     }
 

@@ -1,6 +1,6 @@
-@import hexlet.code.model.Url
+@import hexlet.code.dto.UrlMainReport
 @import java.util.List
-@param List<Url> urlsList
+@param List<UrlMainReport> urlsList
 @param String successMessage
 
 <!DOCTYPE html>
@@ -24,18 +24,20 @@
         <thead>
         <tr>
             <th>ID</th>
-            <th>Name</th>
-            <th>Created At</th>
+            <th>Имя</th>
+            <th>Последняя проверка</th>
+            <th>Код ответа</th>
         </tr>
         </thead>
         <tbody>
-        @for (Url url : urlsList)
+        @for (UrlMainReport urlMainReport : urlsList)
         <tr>
-            <td>${url.getId()}</td>
+            <td>${urlMainReport.getId()}</td>
             <td>
-                <a href="/urls/${url.getId()}">${url.getName()}</a>
+                <a href="/urls/${urlMainReport.getId()}">${urlMainReport.getName()}</a>
             </td>
-            <td>${url.getCreatedAt().toString()}</td>
+            <td>${urlMainReport.getLastCheck() == null ? "" : urlMainReport.getLastCheck().toString()}</td>
+            <td>${urlMainReport.getStatusCode()}</td>
         </tr>
         @endfor
         </tbody>

@@ -1,5 +1,6 @@
 package hexlet.code.controllers;
 
+import hexlet.code.dto.UrlMainReport;
 import hexlet.code.model.Url;
 import hexlet.code.model.UrlCheck;
 import hexlet.code.repository.UrlChecksRepository;
@@ -35,8 +36,8 @@ public class UrlController {
     public static Handler getUrls = ctx -> {
         var successMessage = ctx.consumeSessionAttribute("successMessage");
         successMessage =  successMessage == null ? "" : successMessage;
-        List<Url> urls = UrlsRepository.getUrls();
-        ctx.render("urls/index.jte", Map.of("urlsList", urls, "successMessage", successMessage));
+        List<UrlMainReport> urlsMainReport = UrlChecksRepository.getUrlsMainReport();
+        ctx.render("urls/index.jte", Map.of("urlsList", urlsMainReport, "successMessage", successMessage));
 
     };
 

@@ -43,6 +43,7 @@ dependencies {
     testImplementation 'org.assertj:assertj-core:3.19.0'
     implementation group: 'com.konghq', name: 'unirest-java', version: '3.14.1'
     testImplementation group: 'com.squareup.okhttp3', name: 'mockwebserver', version: '4.11.0'
+    implementation group: 'org.jsoup', name: 'jsoup', version: '1.16.1'
 
 
     compileOnly 'org.projectlombok:lombok:1.18.20'

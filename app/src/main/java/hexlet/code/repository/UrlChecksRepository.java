@@ -1,5 +1,6 @@
 package hexlet.code.repository;
 
+import hexlet.code.dto.UrlMainReport;
 import hexlet.code.model.UrlCheck;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,7 +12,9 @@ import java.util.List;
 public class UrlChecksRepository extends BaseRepository {
 
     public static Boolean save(UrlCheck urlCheck) throws SQLException {
-        var sql = "INSERT INTO urlCheck (created_at, status_code, description, url_id) VALUES (?, ?, ?, ?)";
+        var sql = """
+            INSERT INTO urlCheck (created_at, status_code, description, url_id, title, h1) VALUES (?, ?, ?, ?, ?, ?)
+            """;
 
         try (var conn = BaseRepository.dataSource.getConnection();
              var preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -19,6 +22,9 @@ public class UrlChecksRepository extends BaseRepository {
             preparedStatement.setInt(2, urlCheck.getStatusCode());
             preparedStatement.setString(3, urlCheck.getDescription());
             preparedStatement.setLong(4, urlCheck.getUrlId());
+            preparedStatement.setString(5, urlCheck.getTitle());
+            preparedStatement.setString(6, urlCheck.getH1());
+
             preparedStatement.executeUpdate();
             var generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
@@ -43,6 +49,8 @@ public class UrlChecksRepository extends BaseRepository {
                 Timestamp createdAt = resultSet.getTimestamp("created_at");
                 int statusCode = resultSet.getInt("status_code");
                 String discription = resultSet.getString("description");
+                String title = resultSet.getString("title");
+                String h1 = resultSet.getString("h1");
 
                 UrlCheck urlCheck = new UrlCheck();
                 urlCheck.setId(id);
@@ -50,11 +58,69 @@ public class UrlChecksRepository extends BaseRepository {
                 urlCheck.setStatusCode(statusCode);
                 urlCheck.setDescription(discription);
                 urlCheck.setUrlId(urlId);
+                urlCheck.setTitle(title);
+                urlCheck.setH1(h1);
                 urlChecks.add(urlCheck);
                 // Обработать полученные данные
             }
             return urlChecks;
         }
     }
+
+    public static List<UrlMainReport> getUrlsMainReport() throws SQLException {
+        var sql = """
+                    SELECT
+                        u.id,
+                        u.name,
+                        uc.status_code,
+                        uc.created_at
+                    FROM
+                        urls u
+                    LEFT JOIN (
+                        SELECT
+                            uc.url_id,
+                            uc.status_code,
+                            uc.created_at
+                        FROM
+                            urlCheck uc
+                        WHERE
+                            (uc.url_id, uc.id) IN (
+                                SELECT
+                                    url_id,
+                                    MAX(id)
+                                FROM
+                                    urlCheck
+                                GROUP BY
+                                    url_id
+                            )
+                    ) uc ON u.id = uc.url_id
+                    ORDER BY u.id DESC
+                    LIMIT 30
+                    """;
+
+        try (var conn = BaseRepository.dataSource.getConnection();
+             var preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS))  {
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            List<UrlMainReport> urlsMainReport = new ArrayList<>();
+            while (resultSet.next()) {
+                // Получить данные из результата запроса
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                int statusCode = resultSet.getInt("status_code");
+                Timestamp lastCheck = resultSet.getTimestamp("created_at");
+
+                UrlMainReport urlMainReport = new UrlMainReport();
+                urlMainReport.setId(id);
+                urlMainReport.setName(name);
+                urlMainReport.setStatusCode(statusCode);
+                urlMainReport.setLastCheck(lastCheck);
+                urlsMainReport.add(urlMainReport);
+                // Обработать полученные данные
+            }
+            return urlsMainReport;
+        }
+    }
+
 
 }
