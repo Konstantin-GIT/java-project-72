@@ -122,7 +122,7 @@ class AppTest {
             assertThat(response.body().string())
                 .contains("Информация о URL")
                 .contains("https://javalinTest.io")
-                .contains("ID: " + url.getId());
+                .contains("ID " + url.getId());
         });
     }
 

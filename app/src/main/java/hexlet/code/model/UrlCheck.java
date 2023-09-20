@@ -26,7 +26,7 @@ public class UrlCheck {
 
     private Timestamp createdAt;
 
-    private int statusCode;
+    private Integer statusCode;
 
     private String title;
 

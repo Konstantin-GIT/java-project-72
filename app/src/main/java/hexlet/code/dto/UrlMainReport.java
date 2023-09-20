@@ -14,5 +14,5 @@ public class UrlMainReport {
 
     private Timestamp lastCheck;
 
-    private int statusCode;
+    private Integer statusCode;
 }

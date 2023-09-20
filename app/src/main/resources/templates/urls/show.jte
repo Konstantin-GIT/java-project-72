@@ -33,9 +33,9 @@
     <h1 class="display-4">Информация о URL</h1>
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">ID: ${url.getId()}</h5>
-            <p class="card-text">Name: ${url.getName()}</p>
-            <p class="card-text">Created At: ${url.getCreatedAt().toString()}</p>
+            <h5 class="card-title">ID ${url.getId()}</h5>
+            <p class="card-text">Имя ${url.getName()}</p>
+            <p class="card-text">Дата создания ${url.getCreatedAt().toString()}</p>
         </div>
     </div>
     <form method="post" action="/urls/${url.getId()}/checks">

@@ -5,7 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pretty Bootstrap Form</title>
+    <meta name="description" content="Best page analyzer">
+    <title>Анализатор страниц</title>
     <!-- Include Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
@@ -21,13 +22,13 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header bg-primary text-white text-center">
-                    <h2>Анализатор страниц</h2>
+                    <h1>Анализатор страниц</h1>
                 </div>
                 <div class="card-body">
                     <form method="post" action="/urls">
                         <div class="form-group">
-                            <label for="inputField">Ваше имя:</label>
-                            <input type="text"  class="form-control"  name="url" placeholder="Ваше имя">
+                            <label for="inputField">Ссылка:</label>
+                            <input type="text"  class="form-control"  name="url" placeholder="Ссылка">
                         </div>
                         <button type="submit" class="btn btn-success btn-block">Submit</button>
                     </form>

@@ -37,7 +37,7 @@
                 <a href="/urls/${urlMainReport.getId()}">${urlMainReport.getName()}</a>
             </td>
             <td>${urlMainReport.getLastCheck() == null ? "" : urlMainReport.getLastCheck().toString()}</td>
-            <td>${urlMainReport.getStatusCode()}</td>
+            <td>${urlMainReport.getStatusCode() == null ? "" : urlMainReport.getStatusCode().toString()}</td>
         </tr>
         @endfor
         </tbody>

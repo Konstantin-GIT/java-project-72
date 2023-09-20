@@ -11,3 +11,6 @@ bin
 .project*
 .classpath
 .idea/
+
+hikariDB.mv.db
+hikariDB.trace.db
