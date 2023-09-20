@@ -13,7 +13,7 @@ public class UrlChecksRepository extends BaseRepository {
 
     public static Boolean save(UrlCheck urlCheck) throws SQLException {
         var sql = """
-            INSERT INTO urlCheck (created_at, status_code, description, url_id, title, h1) VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO url_checks (created_at, status_code, description, url_id, title, h1) VALUES (?, ?, ?, ?, ?, ?)
             """;
 
         try (var conn = BaseRepository.dataSource.getConnection();
@@ -36,7 +36,7 @@ public class UrlChecksRepository extends BaseRepository {
     };
 
     public static List<UrlCheck> getUrlChecks(long urlId) throws SQLException {
-        var sql = "SELECT * FROM urlCheck WHERE url_id=? ORDER BY id DESC LIMIT 30";
+        var sql = "SELECT * FROM url_checks WHERE url_id=? ORDER BY id DESC LIMIT 30";
         try (var conn = BaseRepository.dataSource.getConnection();
              var preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS))  {
             preparedStatement.setLong(1, urlId);
@@ -82,14 +82,14 @@ public class UrlChecksRepository extends BaseRepository {
                             uc.status_code,
                             uc.created_at
                         FROM
-                            urlCheck uc
+                            url_checks uc
                         WHERE
                             (uc.url_id, uc.id) IN (
                                 SELECT
                                     url_id,
                                     MAX(id)
                                 FROM
-                                    urlCheck
+                                    url_checks
                                 GROUP BY
                                     url_id
                             )
