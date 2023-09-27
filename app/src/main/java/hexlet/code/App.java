@@ -113,7 +113,7 @@ public final class App {
     }
 
 
-    public static void main(String[] args) throws SQLException, IOException {
+    public static void main(String[] args) throws IOException {
         Javalin app = getApp();
         app.start(getPort());
     }

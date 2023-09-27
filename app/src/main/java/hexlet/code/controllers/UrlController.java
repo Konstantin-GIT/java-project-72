@@ -6,11 +6,10 @@ import hexlet.code.model.UrlCheck;
 import hexlet.code.repository.UrlChecksRepository;
 import hexlet.code.repository.UrlsRepository;
 import io.javalin.http.Handler;
-
+import io.javalin.http.NotFoundResponse;
 import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Map;
-import static hexlet.code.repository.UrlsRepository.getUrlById;
 import static hexlet.code.repository.UrlsRepository.isURLExists;
 import static hexlet.code.utils.UrlParsing.urlParsing;
 
@@ -55,17 +54,15 @@ public class UrlController {
         long id = ctx.pathParamAsClass("id", Long.class).getOrDefault(null);
         var successMessage = ctx.consumeSessionAttribute("successMessage");
         var errorMessage = ctx.consumeSessionAttribute("errorMessage");
-        successMessage =  successMessage == null ? "" : successMessage;
-        errorMessage =  errorMessage == null ? "" : errorMessage;
-        Url url = getUrlById(id);
-        if (url != null) {
-            List<UrlCheck> urlChecks = UrlChecksRepository.getUrlChecks(url.getId());
-            ctx.render("urls/show.jte",
-                Map.of("url", url, "urlChecksList", urlChecks,
-                    "successMessage", successMessage, "errorMessage", errorMessage));
-        } else {
-            ctx.status(404);
-        }
+        successMessage = successMessage == null ? "" : successMessage;
+        errorMessage = errorMessage == null ? "" : errorMessage;
+        Url url = UrlsRepository.getUrlById(id)
+            .orElseThrow(() -> new NotFoundResponse("Url with id = " + id + " not found"));
+
+        List<UrlCheck> urlChecks = UrlChecksRepository.getUrlChecks(url.getId());
+        ctx.render("urls/show.jte",
+            Map.of("url", url, "urlChecksList", urlChecks,
+                "successMessage", successMessage, "errorMessage", errorMessage));
 
     };
 
