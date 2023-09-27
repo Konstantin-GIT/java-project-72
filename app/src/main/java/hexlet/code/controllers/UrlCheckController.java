@@ -19,10 +19,8 @@ public class UrlCheckController {
 
         //
         Url url = UrlsRepository.getUrlById(id);
-        var datetime = new Timestamp(System.currentTimeMillis());
         var response = Unirest.get(url.getName()).asString();
         var responseBody = response.getBody().toString();
-
         Document doc = Jsoup.parse(responseBody);
         int codeStatus = response.getStatus();
         String description = doc.selectFirst("meta[name=description]") == null ? ""
@@ -31,8 +29,7 @@ public class UrlCheckController {
         String h1 =  doc.selectFirst("h1") == null ? "" :  doc.selectFirst("h1").html();
         System.out.println("h1 = " + h1);
         System.out.println("description = " + description);
-
-        UrlCheck urlCheck = new UrlCheck(datetime, codeStatus, description, id, title, h1);
+        UrlCheck urlCheck = new UrlCheck(codeStatus, description, id, title, h1);
         Boolean isCheckCreated = UrlChecksRepository.save(urlCheck);
 
         if (isCheckCreated) {

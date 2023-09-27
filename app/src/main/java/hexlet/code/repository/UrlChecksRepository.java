@@ -15,10 +15,10 @@ public class UrlChecksRepository extends BaseRepository {
         var sql = """
             INSERT INTO url_checks (created_at, status_code, description, url_id, title, h1) VALUES (?, ?, ?, ?, ?, ?)
             """;
-
+        var datetime = new Timestamp(System.currentTimeMillis());
         try (var conn = BaseRepository.dataSource.getConnection();
              var preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setTimestamp(1, urlCheck.getCreatedAt());
+            preparedStatement.setTimestamp(1, datetime);
             preparedStatement.setInt(2, urlCheck.getStatusCode());
             preparedStatement.setString(3, urlCheck.getDescription());
             preparedStatement.setLong(4, urlCheck.getUrlId());
@@ -51,7 +51,6 @@ public class UrlChecksRepository extends BaseRepository {
                 String discription = resultSet.getString("description");
                 String title = resultSet.getString("title");
                 String h1 = resultSet.getString("h1");
-
                 UrlCheck urlCheck = new UrlCheck();
                 urlCheck.setId(id);
                 urlCheck.setCreatedAt(createdAt);

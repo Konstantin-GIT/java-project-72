@@ -12,8 +12,7 @@ public class UrlCheck {
     public UrlCheck() {
     }
 
-    public UrlCheck(Timestamp createdAt, int statusCode, String description, long urlId, String title, String h1) {
-        this.createdAt = createdAt;
+    public UrlCheck(int statusCode, String description, long urlId, String title, String h1) {
         this.statusCode = statusCode;
         this.description = description;
         this.urlId = urlId;
