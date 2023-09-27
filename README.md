@@ -17,9 +17,8 @@ Technologies involved include:
 
 ### Requirements:
 Before using this application you must install and configure:
-
-JDK 20;
-Gradle 8.2
+- JDK 20;
+- Gradle 8.2
 
 ### Run
 ```bash
