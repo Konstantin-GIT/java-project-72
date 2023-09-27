@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
+import lombok.extern.slf4j.Slf4j;
 
 
 
@@ -25,7 +26,8 @@ import static io.javalin.apibuilder.ApiBuilder.path;
 import static io.javalin.apibuilder.ApiBuilder.post;
 import static io.javalin.apibuilder.ApiBuilder.get;
 
-public class App {
+@Slf4j
+public final class App {
 
     private static int getPort() {
         String port = System.getenv().getOrDefault("PORT", "7070");
@@ -54,8 +56,7 @@ public class App {
         var dataSource  = new HikariDataSource(hikariConfig);
 
         String sql = getContentFromStream(getFileFromResourceAsStream("schema.sql"));
-
-        System.out.println(sql);
+        log.info(sql);
         try (var connection = dataSource.getConnection();
              var statement = connection.createStatement()) {
             statement.execute(sql);

@@ -6,6 +6,8 @@ import hexlet.code.model.UrlCheck;
 import hexlet.code.repository.UrlChecksRepository;
 import hexlet.code.repository.UrlsRepository;
 import io.javalin.http.Handler;
+
+import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Map;
 import static hexlet.code.repository.UrlsRepository.getUrlById;
@@ -16,21 +18,30 @@ public class UrlController {
 
     public static Handler createUrl = ctx -> {
         String urlFormParam = ctx.formParam("url");
-        String urlName = urlParsing(urlFormParam);
-        if (urlName == null) {
+        String urlName = null;
+
+        try {
+            urlName = urlParsing(urlFormParam);
+
+        } catch (MalformedURLException e) {
+            System.err.println("Ошибка при разборе URL: " + e.getMessage());
             ctx.sessionAttribute("errorMessage", "Некорректный URL");
             ctx.redirect("/");
             return;
-        } else if (isURLExists(urlName)) {
+        }
+
+        if (isURLExists(urlName)) {
             ctx.sessionAttribute("errorMessage", "Страница уже существует");
             ctx.redirect("/");
             return;
         }
+
         Url url = new Url();
         url.setName(urlName);
         UrlsRepository.save(url);
         ctx.sessionAttribute("successMessage", "Страница успешно добавлена");
         ctx.redirect("/urls");
+
     };
 
     public static Handler getUrls = ctx -> {
