@@ -36,8 +36,7 @@ public class UrlController {
             return;
         }
 
-        Url url = new Url();
-        url.setName(urlName);
+        Url url = new Url(urlName);
         UrlsRepository.save(url);
         ctx.sessionAttribute("successMessage", "Страница успешно добавлена");
         ctx.redirect("/urls");

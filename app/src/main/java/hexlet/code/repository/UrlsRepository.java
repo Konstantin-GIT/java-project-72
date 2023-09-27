@@ -48,9 +48,8 @@ public class UrlsRepository extends BaseRepository {
             if (rs.next()) {
                 String name = rs.getString("name");
                 Timestamp createdAt = rs.getTimestamp("created_at");
-                Url url = new Url();
+                Url url = new Url(name);
                 url.setId(id);
-                url.setName(name);
                 url.setCreatedAt(createdAt);
                 return url;
             }
@@ -71,9 +70,8 @@ public class UrlsRepository extends BaseRepository {
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
                 Timestamp createdAt = resultSet.getTimestamp("created_at");
-                Url url = new Url();
+                Url url = new Url(name);
                 url.setId(id);
-                url.setName(name);
                 url.setCreatedAt(createdAt);
                 urls.add(url);
                 // Обработать полученные данные

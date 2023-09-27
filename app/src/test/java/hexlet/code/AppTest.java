@@ -57,8 +57,7 @@ class AppTest {
 
     @Test
     public void testShowUrlById() throws SQLException {
-        var url = new Url();
-        url.setName("https://javalinTest.io");
+        var url = new Url("https://javalinTest.io");
         UrlsRepository.save(url);
 
         JavalinTest.test(app, (server, client) -> {
@@ -88,8 +87,7 @@ class AppTest {
 
     @Test
     public void testUniqUrlValidation() throws SQLException {
-        var url = new Url();
-        url.setName("https://javalinTest.io");
+        var url = new Url("https://javalinTest.io");
         UrlsRepository.save(url);
 
         JavalinTest.test(app, (server, client) -> {
@@ -112,8 +110,7 @@ class AppTest {
 
     @Test
     public void testCheckShowUrl() throws SQLException {
-        var url = new Url();
-        url.setName("https://javalinTest.io");
+        var url = new Url("https://javalinTest.io");
         UrlsRepository.save(url);
 
         JavalinTest.test(app, (server, client) -> {
@@ -143,10 +140,7 @@ class AppTest {
             );
         mockWebServer.enqueue(mockResponse);
         var urlName = mockWebServer.url("/testParsingResponse");
-
-
-        var url = new Url();
-        url.setName(urlName.toString());
+        var url = new Url(urlName.toString());
         UrlsRepository.save(url);
 
         JavalinTest.test(app, (server, client) -> {
