@@ -5,4 +5,15 @@
 
 [![Test Coverage](https://api.codeclimate.com/v1/badges/c290b110be47475b7b0d/test_coverage)](https://codeclimate.com/github/Konstantin-GIT/java-project-72/test_coverage)
 
-https://deploy-java-priject-72-project4.onrender.com
+### Description
+Page Analyzer - this is full-fledged website based on the Javelin framework that analyzes specified pages for SEO suitability. It implements the fundamental principles of modern website development using the MVC architecture: handling routing, request handlers, and templating, as well as interacting with a database through ORM.
+Technologies involved include: Frontend (Bootstrap, CDN). Javalin Framework (Routing, Views). Database (ORM Ebean, Migrations, Query Builders). Deployment (PaaS). HTTP (including request execution). Integration Testing. Logging.
+
+### Run
+```bash
+./gradlew run
+```
+
+### Example of a deployed website on Render.com:
+<a href="https://deploy-java-priject-72-project4.onrender.com">Page Analyzer</a>
+
