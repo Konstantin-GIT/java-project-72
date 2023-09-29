@@ -83,9 +83,6 @@ public final class App {
         return app;
     }
 
-
-
-
     private static void addRoutes(Javalin app) {
         app.routes(() -> {
             path("/", () -> {
@@ -97,7 +94,7 @@ public final class App {
                 path("{id}", () -> {
                     get(UrlController.showUrl);
                     path("checks", () -> {
-                        post(UrlCheckController.checkCreate);
+                        post(UrlCheckController.checkUrl);
                     });
                 });
             });

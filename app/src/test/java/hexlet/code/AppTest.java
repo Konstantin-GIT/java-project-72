@@ -31,9 +31,9 @@ class AppTest {
 
 
     //@AfterEach
-    public void tearDown() throws IOException {
-        mockWebServer.shutdown();
-    }
+//    public void tearDown() throws IOException {
+//        mockWebServer.shutdown();
+//    }
 
     @Test
     public void testMainPage() {
@@ -47,10 +47,10 @@ class AppTest {
     @Test
     public void testCreateUrl() {
         JavalinTest.test(app, (server, client) -> {
-            var requestBody = "url=https://javalinTest.io";
+            var requestBody = "url=https://javalintest.io";
             var response = client.post("/urls", requestBody);
             assertThat(response.code()).isEqualTo(200);
-            assertThat(response.body().string()).contains("https://javalinTest.io");
+            assertThat(response.body().string()).contains("https://javalintest.io");
 
         });
     }
@@ -87,11 +87,11 @@ class AppTest {
 
     @Test
     public void testUniqUrlValidation() throws SQLException {
-        var url = new Url("https://javalinTest.io");
+        var url = new Url("https://javalintest.io");
         UrlsRepository.save(url);
 
         JavalinTest.test(app, (server, client) -> {
-            var requestBody = "url=https://javalinTest.io";
+            var requestBody = "url=https://javalintest.io";
             var response = client.post("/urls", requestBody);
             assertThat(response.code()).isEqualTo(200);
             assertThat(response.body().string()).contains("Анализатор страниц");

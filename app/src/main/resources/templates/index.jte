@@ -1,4 +1,5 @@
-@param String errorMessage
+@param String flashType
+@param String flash
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,9 +12,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body style="background-color: #f8f9fa;">
-@if (!errorMessage.isEmpty())
+@if (flashType.equals("danger"))
 <div class="alert alert-danger" role="alert">
-    ${errorMessage}
+    ${flash}
 </div>
 @endif
 

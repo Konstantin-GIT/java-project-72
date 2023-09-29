@@ -1,69 +1,85 @@
 package hexlet.code.controllers;
 
-import hexlet.code.dto.UrlMainReport;
+import hexlet.code.dto.UrlPage;
+import hexlet.code.dto.UrlsPage;
 import hexlet.code.model.Url;
 import hexlet.code.model.UrlCheck;
 import hexlet.code.repository.UrlChecksRepository;
 import hexlet.code.repository.UrlsRepository;
 import io.javalin.http.Handler;
 import io.javalin.http.NotFoundResponse;
-import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
+
 import static hexlet.code.repository.UrlsRepository.isURLExists;
-import static hexlet.code.utils.UrlParsing.urlParsing;
 
 public class UrlController {
 
     public static Handler createUrl = ctx -> {
-        String urlFormParam = ctx.formParam("url");
-        String urlName = null;
-
+        var inputUrl = ctx.formParam("url");
+        URL parsedUrl;
         try {
-            urlName = urlParsing(urlFormParam);
-
-        } catch (MalformedURLException e) {
-            System.err.println("Ошибка при разборе URL: " + e.getMessage());
-            ctx.sessionAttribute("errorMessage", "Некорректный URL");
+            parsedUrl = new URL(inputUrl);
+        } catch (Exception e) {
+            ctx.sessionAttribute("flash", "Некорректный адрес");
+            ctx.sessionAttribute("flash-type", "danger");
             ctx.redirect("/");
             return;
         }
 
-        if (isURLExists(urlName)) {
-            ctx.sessionAttribute("errorMessage", "Страница уже существует");
+        String normalizedUrl = String
+            .format(
+                "%s://%s%s",
+                parsedUrl.getProtocol(),
+                parsedUrl.getHost(),
+                parsedUrl.getPort() == -1 ? "" : ":" + parsedUrl.getPort()
+            )
+            .toLowerCase();
+
+        if (isURLExists(normalizedUrl)) {
+            ctx.sessionAttribute("flash", "Страница уже существует");
+            ctx.sessionAttribute("flash-type", "danger");
             ctx.redirect("/");
             return;
         }
 
-        Url url = new Url(urlName);
+        Url url = new Url(normalizedUrl);
         UrlsRepository.save(url);
-        ctx.sessionAttribute("successMessage", "Страница успешно добавлена");
+        ctx.sessionAttribute("flash", "Страница успешно создана");
+        ctx.sessionAttribute("flash-type", "success");
         ctx.redirect("/urls");
-
     };
 
-    public static Handler getUrls = ctx -> {
-        var successMessage = ctx.consumeSessionAttribute("successMessage");
-        successMessage =  successMessage == null ? "" : successMessage;
-        List<UrlMainReport> urlsMainReport = UrlChecksRepository.getUrlsMainReport();
-        ctx.render("urls/index.jte", Map.of("urlsList", urlsMainReport, "successMessage", successMessage));
 
+    public static Handler getUrls = ctx -> {
+        String flash = ctx.consumeSessionAttribute("flash");
+        String flashType = ctx.consumeSessionAttribute("flash-type");
+        flash =  flash == null ? "" : flash;
+        flashType =  flashType == null ? "" : flashType;
+
+        List<Url> urls = UrlsRepository.getUrls();
+        Map<Long, UrlCheck> urlChecks = UrlChecksRepository.findLatestChecks();
+        var urlsPage = new UrlsPage(urls, urlChecks);
+        urlsPage.setFlashType(flashType);
+        urlsPage.setFlash(flash);
+        ctx.render("urls/index.jte",  Map.of("urlsPage", urlsPage));
     };
 
     public static Handler showUrl = ctx -> {
         long id = ctx.pathParamAsClass("id", Long.class).getOrDefault(null);
-        var successMessage = ctx.consumeSessionAttribute("successMessage");
-        var errorMessage = ctx.consumeSessionAttribute("errorMessage");
-        successMessage = successMessage == null ? "" : successMessage;
-        errorMessage = errorMessage == null ? "" : errorMessage;
+        String flash = ctx.consumeSessionAttribute("flash");
+        String flashType = ctx.consumeSessionAttribute("flash-type");
+        flash =  flash == null ? "" : flash;
+        flashType =  flashType == null ? "" : flashType;
         Url url = UrlsRepository.getUrlById(id)
             .orElseThrow(() -> new NotFoundResponse("Url with id = " + id + " not found"));
-
         List<UrlCheck> urlChecks = UrlChecksRepository.getUrlChecks(url.getId());
+        UrlPage urlPage = new UrlPage(url, urlChecks);
+        urlPage.setFlash(flash);
+        urlPage.setFlashType(flashType);
+
         ctx.render("urls/show.jte",
-            Map.of("url", url, "urlChecksList", urlChecks,
-                "successMessage", successMessage, "errorMessage", errorMessage));
-
+            Map.of("urlPage", urlPage));
     };
-
 }

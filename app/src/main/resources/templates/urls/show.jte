@@ -1,13 +1,8 @@
+@import hexlet.code.dto.UrlPage
 @import hexlet.code.model.Url
 @import hexlet.code.model.UrlCheck
 @import java.util.List
-@param Url url
-@param List<UrlCheck> urlChecksList
-@param String successMessage
-@param String errorMessage
-
-
-
+@param UrlPage urlPage
 
 <!DOCTYPE html>
 <html lang="en">
@@ -19,26 +14,26 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-@if (!successMessage.isEmpty())
+@if (urlPage.getFlashType().equals("success"))
     <div class="alert alert-success" role="alert">
-        ${successMessage}
+        ${urlPage.getFlash()}
     </div>
 @endif
-@if (!errorMessage.isEmpty())
+@if (urlPage.getFlashType().equals("danger"))
     <div class="alert alert-success" role="alert">
-        ${errorMessage}
+        ${urlPage.getFlash()}
     </div>
 @endif
 <div class="container mt-5">
     <h1 class="display-4">Информация о URL</h1>
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">ID ${url.getId()}</h5>
-            <p class="card-text">Имя ${url.getName()}</p>
-            <p class="card-text">Дата создания ${url.getCreatedAt().toString()}</p>
+            <h5 class="card-title">ID ${urlPage.getUrl().getId()}</h5>
+            <p class="card-text">Имя ${urlPage.getUrl().getName()}</p>
+            <p class="card-text">Дата создания ${urlPage.getUrl().getCreatedAt().toString()}</p>
         </div>
     </div>
-    <form method="post" action="/urls/${url.getId()}/checks">
+    <form method="post" action="/urls/${urlPage.getUrl().getId()}/checks">
         <div class="form-group">
             <label for="inputField">Проверки</label>
         </div>
@@ -56,7 +51,7 @@
         </tr>
         </thead>
         <tbody>
-        @for (UrlCheck urlCheck : urlChecksList)
+        @for (UrlCheck urlCheck : urlPage.getChecks())
             <tr>
                 <td>${urlCheck.getId()}</td>
                 <td>${urlCheck.getStatusCode()}</td>

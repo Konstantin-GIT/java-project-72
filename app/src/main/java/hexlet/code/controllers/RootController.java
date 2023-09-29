@@ -6,9 +6,11 @@ import java.util.Map;
 public class RootController {
 
     public static Handler index = ctx -> {
-        var errorMessage = ctx.consumeSessionAttribute("errorMessage");
-        errorMessage =  errorMessage == null ? "" : errorMessage;
-        ctx.render("index.jte", Map.of("errorMessage", errorMessage));
+        String flash = ctx.consumeSessionAttribute("flash");
+        String flashType = ctx.consumeSessionAttribute("flash-type");
+        flash =  flash == null ? "" : flash;
+        flashType =  flashType == null ? "" : flashType;
+        ctx.render("index.jte", Map.of("flash", flash, "flashType", flashType));
 
     };
 }

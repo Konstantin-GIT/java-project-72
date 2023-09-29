@@ -1,13 +1,14 @@
 package hexlet.code.repository;
 
-import hexlet.code.dto.UrlMainReport;
 import hexlet.code.model.UrlCheck;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UrlChecksRepository extends BaseRepository {
 
@@ -33,12 +34,13 @@ public class UrlChecksRepository extends BaseRepository {
             }
         }
         return false;
-    };
+    }
+
 
     public static List<UrlCheck> getUrlChecks(long urlId) throws SQLException {
         var sql = "SELECT * FROM url_checks WHERE url_id=? ORDER BY id DESC LIMIT 30";
         try (var conn = BaseRepository.dataSource.getConnection();
-             var preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS))  {
+             var preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setLong(1, urlId);
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -66,39 +68,64 @@ public class UrlChecksRepository extends BaseRepository {
         }
     }
 
+    public static Map<Long, UrlCheck> findLatestChecks() throws SQLException {
+        var sql = "SELECT DISTINCT ON (url_id) * from url_checks order by url_id DESC, id DESC";
+        try (var conn = dataSource.getConnection();
+             var stmt = conn.prepareStatement(sql)) {
+            var resultSet = stmt.executeQuery();
+            var result = new HashMap<Long, UrlCheck>();
+            while (resultSet.next()) {
+                var id = resultSet.getLong("id");
+                var urlId = resultSet.getLong("url_id");
+                var statusCode = resultSet.getInt("status_code");
+                var title = resultSet.getString("title");
+                var h1 = resultSet.getString("h1");
+                var description = resultSet.getString("description");
+                var createdAt = resultSet.getTimestamp("created_at");
+                var check = new UrlCheck(statusCode, title, h1, description);
+                check.setId(id);
+                check.setUrlId(urlId);
+                check.setCreatedAt(createdAt);
+                result.put(urlId, check);
+            }
+            return result;
+        }
+    }
+
+    /*
     public static List<UrlMainReport> getUrlsMainReport() throws SQLException {
         var sql = """
-                    SELECT
-                        u.id,
-                        u.name,
-                        uc.status_code,
-                        uc.created_at
-                    FROM
-                        urls u
-                    LEFT JOIN (
+            SELECT
+                u.id,
+                u.name,
+                uc.status_code,
+                uc.created_at
+            FROM
+                urls u
+            LEFT JOIN (
+                SELECT
+                    uc.url_id,
+                    uc.status_code,
+                    uc.created_at
+                FROM
+                    url_checks uc
+                WHERE
+                    (uc.url_id, uc.id) IN (
                         SELECT
-                            uc.url_id,
-                            uc.status_code,
-                            uc.created_at
+                            url_id,
+                            MAX(id)
                         FROM
-                            url_checks uc
-                        WHERE
-                            (uc.url_id, uc.id) IN (
-                                SELECT
-                                    url_id,
-                                    MAX(id)
-                                FROM
-                                    url_checks
-                                GROUP BY
-                                    url_id
-                            )
-                    ) uc ON u.id = uc.url_id
-                    ORDER BY u.id DESC
-                    LIMIT 30
-                    """;
+                            url_checks
+                        GROUP BY
+                            url_id
+                    )
+            ) uc ON u.id = uc.url_id
+            ORDER BY u.id DESC
+            LIMIT 30
+            """;
 
         try (var conn = BaseRepository.dataSource.getConnection();
-             var preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS))  {
+             var preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             List<UrlMainReport> urlsMainReport = new ArrayList<>();
@@ -120,6 +147,5 @@ public class UrlChecksRepository extends BaseRepository {
             return urlsMainReport;
         }
     }
-
-
+*/
 }

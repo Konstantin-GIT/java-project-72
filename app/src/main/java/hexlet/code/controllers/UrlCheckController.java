@@ -13,7 +13,7 @@ import org.jsoup.nodes.Document;
 
 public class UrlCheckController {
 
-    public static Handler checkCreate = ctx -> {
+    public static Handler checkUrl = ctx -> {
         long id = ctx.pathParamAsClass("id", Long.class).getOrDefault(null);
 
         Url url = UrlsRepository.getUrlById(id)
@@ -31,11 +31,14 @@ public class UrlCheckController {
             System.out.println("description = " + description);
             UrlCheck urlCheck = new UrlCheck(codeStatus, description, id, title, h1);
             UrlChecksRepository.save(urlCheck);
-            ctx.sessionAttribute("successMessage", "Страница успешно проверена");
+            ctx.sessionAttribute("flash", "Страница успешно проверена");
+            ctx.sessionAttribute("flash-type", "success");
         } catch (UnirestException e) {
-            ctx.sessionAttribute("errorMessage", "Страница не проверена");
+            ctx.sessionAttribute("flash", "Страница недоступна");
+            ctx.sessionAttribute("flash-type", "danger");
         } catch (Exception e) {
-            ctx.sessionAttribute("errorMessage", e.getMessage());
+            ctx.sessionAttribute("flash", e.getMessage());
+            ctx.sessionAttribute("flash-type", "danger");
         }
 
         ctx.redirect("/urls/" + id);

@@ -71,7 +71,6 @@ public class UrlsRepository extends BaseRepository {
             List<Url> urls = new ArrayList<>();
             while (resultSet.next()) {
                 // Получить данные из результата запроса
-
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
                 Timestamp createdAt = resultSet.getTimestamp("created_at");

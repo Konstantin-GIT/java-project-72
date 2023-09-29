@@ -12,13 +12,20 @@ public class UrlCheck {
     public UrlCheck() {
     }
 
+    public UrlCheck(int statusCode, String title, String h1, String description) {
+        this.statusCode = statusCode;
+        this.title = title;
+        this.h1 = h1;
+        this.description = description;
+    }
+
+
     public UrlCheck(int statusCode, String description, long urlId, String title, String h1) {
         this.statusCode = statusCode;
         this.description = description;
         this.urlId = urlId;
         this.title = title;
         this.h1 = h1;
-        // Другие поля останутся неинициализированными
     }
 
     private long id;

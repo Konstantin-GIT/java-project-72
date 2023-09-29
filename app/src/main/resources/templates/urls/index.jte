@@ -1,7 +1,8 @@
-@import hexlet.code.dto.UrlMainReport
-@import java.util.List
-@param List<UrlMainReport> urlsList
-@param String successMessage
+@import hexlet.code.dto.UrlsPage
+@import hexlet.code.model.UrlCheck
+@import java.util.Map
+@param UrlsPage urlsPage
+<!--@param String successMessage -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,9 +14,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-@if (!successMessage.isEmpty())
+@if (urlsPage.getFlashType().equals("success"))
     <div class="alert alert-success" role="alert">
-        ${successMessage}
+        ${urlsPage.getFlash()}
+    </div>
+@endif
+@if (urlsPage.getFlashType().equals("danger"))
+    <div class="alert alert-success" role="alert">
+        ${urlsPage.getFlash()}
     </div>
 @endif
 <div class="container mt-5">
@@ -30,14 +36,14 @@
         </tr>
         </thead>
         <tbody>
-        @for (UrlMainReport urlMainReport : urlsList)
+        @for(var url : urlsPage.getUrls())
         <tr>
-            <td>${urlMainReport.getId()}</td>
+            <td>${url.getId()}</td>
             <td>
-                <a href="/urls/${urlMainReport.getId()}">${urlMainReport.getName()}</a>
+                <a href="/urls/${url.getId()}">${url.getName()}</a>
             </td>
-            <td>${urlMainReport.getLastCheck() == null ? "" : urlMainReport.getLastCheck().toString()}</td>
-            <td>${urlMainReport.getStatusCode() == null ? "" : urlMainReport.getStatusCode().toString()}</td>
+            <td>${urlsPage.getUrlChecks().isEmpty() || urlsPage.getUrlChecks().get(url.getId()) == null  ? "" : urlsPage.getUrlChecks().get(url.getId()).getCreatedAt().toString()}</td>
+            <td>${urlsPage.getUrlChecks().isEmpty() || urlsPage.getUrlChecks().get(url.getId()) == null ? "" : urlsPage.getUrlChecks().get(url.getId()).getStatusCode().toString()}</td>
         </tr>
         @endfor
         </tbody>
