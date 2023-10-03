@@ -4,16 +4,19 @@
 @import java.util.List
 @param UrlPage urlPage
 
+
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Информация о URL</title>
-    <!-- Подключение CSS-файла Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Анализатор страниц</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 </head>
-<body>
 @if (urlPage.getFlashType().equals("success"))
     <div class="alert alert-success" role="alert">
         ${urlPage.getFlash()}
@@ -24,49 +27,84 @@
         ${urlPage.getFlash()}
     </div>
 @endif
-<div class="container mt-5">
-    <h1 class="display-4">Информация о URL</h1>
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">ID ${urlPage.getUrl().getId()}</h5>
-            <p class="card-text">Имя ${urlPage.getUrl().getName()}</p>
-            <p class="card-text">Дата создания ${urlPage.getUrl().getCreatedAt().toString()}</p>
+<body class="d-flex flex-column min-vh-100">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Анализатор страниц</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="navbar-nav">
+                <a class="nav-link" href="/">Главная</a>
+                <a class="nav-link" href="/urls">Сайты</a>
+            </div>
         </div>
     </div>
-    <form method="post" action="/urls/${urlPage.getUrl().getId()}/checks">
-        <div class="form-group">
-            <label for="inputField">Проверки</label>
-        </div>
-        <button type="submit" class="btn btn-success btn-block">Запустить проверку</button>
-    </form>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Код ответа</th>
-            <th>title</th>
-            <th>h1</th>
-            <th>description</th>
-            <th>Дата проверки</th>
-        </tr>
-        </thead>
-        <tbody>
-        @for (UrlCheck urlCheck : urlPage.getChecks())
-            <tr>
-                <td>${urlCheck.getId()}</td>
-                <td>${urlCheck.getStatusCode()}</td>
-                <td>${urlCheck.getTitle()}</td>
-                <td>${urlCheck.getH1()}</td>
-                <td>${urlCheck.getDescription()}</td>
-                <td>${urlCheck.getCreatedAt().toString()}</td>
-            </tr>
-        @endfor
-        </tbody>
-    </table>
-</div>
+</nav>
 
-<!-- Подключение JS-файлов Bootstrap (jQuery и Popper.js) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<main class="flex-grow-1">
+
+    <section>
+        <div class="container-lg mt-5">
+            <h1>Сайт https://www.example.com</h1>
+
+            <table class="table table-bordered table-hover mt-3">
+                <tbody>
+                <tr>
+                    <td>ID</td>
+                    <td>${urlPage.getUrl().getId()}</td>
+                </tr>
+                <tr>
+                    <td>Имя</td>
+                    <td>${urlPage.getUrl().getName()}</td>
+                </tr>
+                <tr>
+                    <td>Дата создания</td>
+                    <td>${urlPage.getUrl().getCreatedAt().toString()}</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <h2 class="mt-5">Проверки</h2>
+            <form method="post" action="/urls/${urlPage.getUrl().getId()}/checks">
+                <button type="submit" class="btn btn-primary">Запустить проверку</button>
+            </form>
+
+            <table class="table table-bordered table-hover mt-3">
+                <thead>
+                <th class="col-1">ID</th>
+                <th class="col-1">Код ответа</th>
+                <th>title</th>
+                <th>h1</th>
+                <th>description</th>
+                <th class="col-2">Дата проверки</th>
+                </thead>
+                <tbody>
+                @for (UrlCheck urlCheck : urlPage.getChecks())
+                    <tr>
+                        <td>${urlCheck.getId()}</td>
+                        <td>${urlCheck.getStatusCode()}</td>
+                        <td>${urlCheck.getTitle()}</td>
+                        <td>${urlCheck.getH1()}</td>
+                        <td>${urlCheck.getDescription()}</td>
+                        <td>${urlCheck.getCreatedAt().toString()}</td>
+                    </tr>
+                @endfor
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<footer class="footer border-top py-3 mt-5 bg-light">
+    <div class="container-xl">
+        <div class="text-center">
+            created by
+            <a href="https://ru.hexlet.io" target="_blank">Hexlet</a>
+        </div>
+    </div>
+</footer>
 </body>
+
 </html>
