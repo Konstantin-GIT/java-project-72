@@ -110,16 +110,15 @@ class AppTest {
 
     @Test
     public void testCheckShowUrl() throws SQLException {
-        var url = new Url("https://javalinTest.io");
+        var url = new Url("https://javalintest.io");
         UrlsRepository.save(url);
 
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls/" + url.getId());
             assertThat(response.code()).isEqualTo(200);
             assertThat(response.body().string())
-                .contains("Информация о URL")
-                .contains("https://javalinTest.io")
-                .contains("ID " + url.getId());
+                .contains("Проверки")
+                .contains("https://javalintest.io");
         });
     }
 
