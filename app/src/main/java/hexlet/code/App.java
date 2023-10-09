@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 import static io.javalin.apibuilder.ApiBuilder.path;
 import static io.javalin.apibuilder.ApiBuilder.post;
 import static io.javalin.apibuilder.ApiBuilder.get;
+import static io.javalin.apibuilder.ApiBuilder.delete;
 
 @Slf4j
 public final class App {
@@ -97,6 +98,9 @@ public final class App {
                         post(UrlCheckController.checkUrl);
                     });
                 });
+            });
+            path("/test/delete/{id}", () -> {
+                delete(UrlController.deleteUrl);
             });
         });
     }

@@ -82,4 +82,9 @@ public class UrlController {
         ctx.render("urls/show.jte",
             Map.of("urlPage", urlPage));
     };
+
+    public static Handler deleteUrl = ctx -> {
+        long id = ctx.pathParamAsClass("id", Long.class).getOrDefault(null);
+        UrlsRepository.deleteUrl(id);
+    };
 }

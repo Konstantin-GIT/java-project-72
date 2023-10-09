@@ -1,12 +1,15 @@
 package hexlet.code;
 
 import hexlet.code.model.Url;
+import hexlet.code.repository.UrlChecksRepository;
 import hexlet.code.repository.UrlsRepository;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import io.javalin.Javalin;
 import io.javalin.testtools.JavalinTest;
@@ -23,17 +26,10 @@ class AppTest {
     public void setUpMock() throws IOException {
         mockWebServer = new MockWebServer();
         mockWebServer.start();
-
         app = App.getApp();
 
     }
 
-
-
-    //@AfterEach
-//    public void tearDown() throws IOException {
-//        mockWebServer.shutdown();
-//    }
 
     @Test
     public void testMainPage() {
@@ -70,7 +66,8 @@ class AppTest {
     @Test
     public void testNotFoundUrlById() {
         JavalinTest.test(app, (server, client) -> {
-            var response = client.get("/urls/777");
+            client.delete("/test/delete/777");
+            var response =  client.get("/urls/777");
             assertThat(response.code()).isEqualTo(404);
         });
     }
@@ -124,19 +121,11 @@ class AppTest {
 
 
     @Test
-    public void testParsingResponse() throws SQLException {
+    public void testParsingResponse() throws SQLException, IOException {
         MockResponse mockResponse = new MockResponse()
             .setResponseCode(200)
-            .setBody("""
-                 <html>
-                 <head>
-                 <meta name="description" content="Open source Java">
-                 <title>Sample Page</title>
-                 </head>
-                 <body><h1>Hello, World!</h1></body>
-                 </html>
-                """
-            );
+            .setBody(Files.readString(Paths.get("./src/test/resources/test-page.html")));
+
         mockWebServer.enqueue(mockResponse);
         var urlName = mockWebServer.url("/testParsingResponse");
         var url = new Url(urlName.toString());
@@ -149,6 +138,39 @@ class AppTest {
                 .contains("Hello, World!</td>")
                 .contains("Sample Page</td>")
                 .contains("Open source Java</td>");
+        });
+    }
+
+
+
+    @Test
+    void testStore() throws SQLException {
+        String url = mockWebServer.url("https://ru.hexlet.io/").toString().replaceAll("/$", "");
+        JavalinTest.test(app, (server, client) -> {
+            var requestBody = "url=" + url;
+            assertThat(client.post("/urls", requestBody).code()).isEqualTo(200);
+            var actualUrl = UrlsRepository.findByName(url).get();
+            assertThat(actualUrl).isNotNull();
+            assertThat(actualUrl.getName()).isEqualTo(url);
+
+            client.post("/urls/" + actualUrl.getId() + "/checks", "");
+            var response = client.get("/urls/" + actualUrl.getId());
+            assertThat(response.code()).isEqualTo(200);
+            assertThat(response.body().string()).contains(url);
+
+            var actualCheckUrl = UrlChecksRepository
+                .findLatestChecks().get(actualUrl.getId());
+
+            assertThat(actualCheckUrl).isNotNull();
+            assertThat(actualCheckUrl.getStatusCode()).isEqualTo(200);
+            assertThat(actualCheckUrl.getTitle())
+                .isEqualTo("Хекслет — онлайн-школа программирования, онлайн-обучение ИТ-профессиям");
+            assertThat(actualCheckUrl.getH1())
+                .isEqualTo("Лучшая школа программирования по&nbsp;версии пользователей Хабра");
+            assertThat(actualCheckUrl.getDescription())
+                .contains("Хекслет — лучшая школа программирования по версии пользователей Хабра. "
+                    + "Авторские программы обучения с практикой и готовыми проектами в резюме. "
+                    + "Помощь в трудоустройстве после успешного окончания обучения");
         });
     }
 

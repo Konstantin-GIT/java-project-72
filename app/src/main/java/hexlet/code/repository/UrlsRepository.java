@@ -84,4 +84,33 @@ public class UrlsRepository extends BaseRepository {
         }
     }
 
+    public static void deleteUrl(Long id) throws SQLException {
+        var sql = "DELETE FROM urls WHERE id = ?";
+        try (var conn = dataSource.getConnection();
+             var stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, id);
+            stmt.executeUpdate();
+        }
+    }
+
+    public static Optional<Url> findByName(String urlName) throws SQLException {
+        var sql = "SELECT * FROM urls WHERE name= ?";
+        try (var conn = BaseRepository.dataSource.getConnection();
+             var preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            preparedStatement.setString(1, urlName);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                var name = resultSet.getString("name");
+                var createdAt = resultSet.getTimestamp("created_at");
+                var urlId = resultSet.getLong("id");
+                var url = new Url(name);
+                url.setId(urlId);
+                url.setCreatedAt(createdAt);
+
+                return Optional.of(url);
+            }
+            return Optional.empty();
+        }
+    }
+
 }

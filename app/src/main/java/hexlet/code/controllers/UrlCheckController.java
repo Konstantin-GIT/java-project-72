@@ -8,8 +8,11 @@ import io.javalin.http.Handler;
 import io.javalin.http.NotFoundResponse;
 import kong.unirest.Unirest;
 import kong.unirest.UnirestException;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+
+@Slf4j
 
 public class UrlCheckController {
 
@@ -27,8 +30,8 @@ public class UrlCheckController {
                 : doc.selectFirst("meta[name=description]").attr("content");
             String title =  doc.title();
             String h1 =  doc.selectFirst("h1") == null ? "" :  doc.selectFirst("h1").html();
-            System.out.println("h1 = " + h1);
-            System.out.println("description = " + description);
+            log.info("h1 = " + h1);
+            log.info("description = " + description);
             UrlCheck urlCheck = new UrlCheck(codeStatus, description, id, title, h1);
             UrlChecksRepository.save(urlCheck);
             ctx.sessionAttribute("flash", "Страница успешно проверена");
