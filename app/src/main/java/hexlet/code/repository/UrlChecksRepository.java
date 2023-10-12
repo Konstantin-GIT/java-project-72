@@ -50,17 +50,12 @@ public class UrlChecksRepository extends BaseRepository {
                 int id = resultSet.getInt("id");
                 Timestamp createdAt = resultSet.getTimestamp("created_at");
                 int statusCode = resultSet.getInt("status_code");
-                String discription = resultSet.getString("description");
+                String description = resultSet.getString("description");
                 String title = resultSet.getString("title");
                 String h1 = resultSet.getString("h1");
-                UrlCheck urlCheck = new UrlCheck();
+                UrlCheck urlCheck = new UrlCheck(statusCode, description, urlId, title, h1);
                 urlCheck.setId(id);
                 urlCheck.setCreatedAt(createdAt);
-                urlCheck.setStatusCode(statusCode);
-                urlCheck.setDescription(discription);
-                urlCheck.setUrlId(urlId);
-                urlCheck.setTitle(title);
-                urlCheck.setH1(h1);
                 urlChecks.add(urlCheck);
                 // Обработать полученные данные
             }

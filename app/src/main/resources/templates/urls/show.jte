@@ -49,7 +49,7 @@
 
     <section>
         <div class="container-lg mt-5">
-            <h1>Сайт https://www.example.com</h1>
+            <h1>Сайт ${urlPage.getUrl().getName()}</h1>
 
             <table class="table table-bordered table-hover mt-3">
                 <tbody>

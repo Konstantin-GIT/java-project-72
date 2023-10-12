@@ -9,9 +9,6 @@ import java.sql.Timestamp;
 @Setter
 public class UrlCheck {
 
-    public UrlCheck() {
-    }
-
     public UrlCheck(int statusCode, String title, String h1, String description) {
         this.statusCode = statusCode;
         this.title = title;
