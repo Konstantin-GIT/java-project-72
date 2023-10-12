@@ -6,11 +6,14 @@ import hexlet.code.repository.UrlChecksRepository;
 import hexlet.code.repository.UrlsRepository;
 import io.javalin.http.Handler;
 import io.javalin.http.NotFoundResponse;
+import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import kong.unirest.UnirestException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 @Slf4j
 
@@ -22,14 +25,17 @@ public class UrlCheckController {
         Url url = UrlsRepository.getUrlById(id)
             .orElseThrow(() -> new NotFoundResponse("Url with id = " + id + " not found"));
         try {
-            var response = Unirest.get(url.getName()).asString();
-            var responseBody = response.getBody().toString();
-            Document doc = Jsoup.parse(responseBody);
+            HttpResponse<String> response = Unirest.get(url.getName()).asString();
+
+            Document doc = Jsoup.parse(response.getBody());
+
             int codeStatus = response.getStatus();
-            String description = doc.selectFirst("meta[name=description]") == null ? ""
-                : doc.selectFirst("meta[name=description]").attr("content");
+            Element descriptionElement = doc.selectFirst("meta[name=description]");
+            String description = descriptionElement == null ? "" : descriptionElement.attr("content");
             String title =  doc.title();
-            String h1 =  doc.selectFirst("h1") == null ? "" :  doc.selectFirst("h1").html();
+            Element h1Element = doc.selectFirst("h1");
+            String h1 = h1Element == null ? "" : h1Element.text();
+            // h1 = StringEscapeUtils.unescapeHtml4(h1);
             log.info("h1 = " + h1);
             log.info("description = " + description);
             UrlCheck urlCheck = new UrlCheck(codeStatus, description, id, title, h1);
