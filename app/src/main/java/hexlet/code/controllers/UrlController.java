@@ -40,7 +40,7 @@ public class UrlController {
         if (isURLExists(normalizedUrl)) {
             ctx.sessionAttribute("flash", "Страница уже существует");
             ctx.sessionAttribute("flash-type", "danger");
-            ctx.redirect("/");
+            ctx.redirect("/urls");
             return;
         }
 
