@@ -58,7 +58,7 @@ public class UrlController {
         flash =  flash == null ? "" : flash;
         flashType =  flashType == null ? "" : flashType;
 
-        List<Url> urls = UrlsRepository.getUrls().get();
+        List<Url> urls = UrlsRepository.getUrls();
         Map<Long, UrlCheck> urlChecks = UrlChecksRepository.findLatestChecks();
         var urlsPage = new UrlsPage(urls, urlChecks);
         urlsPage.setFlashType(flashType);

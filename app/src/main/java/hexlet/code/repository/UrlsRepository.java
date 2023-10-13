@@ -62,7 +62,7 @@ public class UrlsRepository extends BaseRepository {
     }
 
 
-    public static Optional<List<Url>> getUrls() throws SQLException {
+    public static List<Url> getUrls() throws SQLException {
         var sql = "SELECT * FROM urls";
         try (var conn = BaseRepository.dataSource.getConnection();
              Statement statement = conn.createStatement()) {
@@ -80,7 +80,7 @@ public class UrlsRepository extends BaseRepository {
                 urls.add(url);
                 // Обработать полученные данные
             }
-            return Optional.of(urls);
+            return urls;
         }
     }
 
