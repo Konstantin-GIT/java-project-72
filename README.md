@@ -8,9 +8,9 @@
 ### Description
 Page Analyzer - this is full-fledged website based on the Javelin framework that analyzes specified pages for SEO suitability. It implements the fundamental principles of modern website development using the MVC architecture: handling routing, request handlers, and templating, as well as interacting with a database through ORM.
 Technologies involved include: 
-- Frontend (Bootstrap, CDN).
+- Frontend (Bootstrap).
 - Javalin Framework (Routing, Views). 
-- Database (ORM Ebean, Migrations, Query Builders). 
+- Database (PostgreSQL, H2, JDBC API (Hikari), Migrations, Query Builders). 
 - Deployment (PaaS). HTTP (including request execution). 
 - Integration Testing. Logging.
 - Linters, running tests, CI.
@@ -26,7 +26,7 @@ Before using this application you must install and configure:
 ```
 
 ### Example of a deployed website on Render.com:
-<a href="https://deploy-java-priject-72-project4.onrender.com">Page Analyzer</a>
+<a href="https://page-analyzer-java-project-72-4.onrender.com">Page Analyzer</a>
 
 
 
