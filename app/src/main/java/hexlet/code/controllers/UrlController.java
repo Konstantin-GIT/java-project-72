@@ -12,7 +12,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
-import static hexlet.code.repository.UrlsRepository.isURLExists;
+import static hexlet.code.repository.UrlsRepository.isUrlExists;
 
 public class UrlController {
 
@@ -37,7 +37,7 @@ public class UrlController {
             )
             .toLowerCase();
 
-        if (isURLExists(normalizedUrl)) {
+        if (isUrlExists(normalizedUrl)) {
             ctx.sessionAttribute("flash", "Страница уже существует");
             ctx.sessionAttribute("flash-type", "danger");
             ctx.redirect("/urls");

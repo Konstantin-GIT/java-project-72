@@ -144,19 +144,27 @@ class AppTest {
 
 
     @Test
-    void testStore() throws SQLException {
-        String url = mockWebServer.url("https://ru.hexlet.io/").toString().replaceAll("/$", "");
+    void testStore() throws SQLException, IOException {
+
+        MockResponse mockResponse = new MockResponse()
+            .setResponseCode(200)
+            .setBody(Files.readString(Paths.get("./src/test/resources/test-page_2.html")));
+        mockWebServer.enqueue(mockResponse);
+        var urlName = mockWebServer.url("/testStoreResponse");
+        var url = new Url(urlName.toString());
+        UrlsRepository.save(url);
+
         JavalinTest.test(app, (server, client) -> {
-            var requestBody = "url=" + url;
-            assertThat(client.post("/urls", requestBody).code()).isEqualTo(200);
-            var actualUrl = UrlsRepository.findByName(url).get();
+            var requestFormParam = "url=" + url.getName();
+            assertThat(client.post("/urls", requestFormParam).code()).isEqualTo(200);
+            var actualUrl = UrlsRepository.findByName(url.getName()).get();
             assertThat(actualUrl).isNotNull();
-            assertThat(actualUrl.getName()).isEqualTo(url);
+            assertThat(actualUrl.getName()).isEqualTo(url.getName());
 
             client.post("/urls/" + actualUrl.getId() + "/checks", "");
             var response = client.get("/urls/" + actualUrl.getId());
             assertThat(response.code()).isEqualTo(200);
-            assertThat(response.body().string()).contains(url);
+            assertThat(response.body().string()).contains(url.getName());
 
             var actualCheckUrl = UrlChecksRepository
                 .findLatestChecks().get(actualUrl.getId());

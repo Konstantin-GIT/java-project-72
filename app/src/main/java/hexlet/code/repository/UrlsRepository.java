@@ -27,7 +27,7 @@ public class UrlsRepository extends BaseRepository {
         }
     }
 
-    public static boolean isURLExists(String urlName) throws SQLException {
+    public static boolean isUrlExists(String urlName) throws SQLException {
         var sql = "SELECT * FROM urls WHERE name= ?";
         try (var conn = BaseRepository.dataSource.getConnection();
              var preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
